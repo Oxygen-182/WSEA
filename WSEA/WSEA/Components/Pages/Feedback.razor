@@ -1,5 +1,12 @@
 ﻿@page "/feedback"
 
+@using WSEA.Data
+@using WSEA.Data.WSEA
+
+@inherits OwningComponentBase<WSEAService>
+
+@rendermode InteractiveServer
+
 <section class="vh-100 gradient-custom">
     <div class="container py-5 h-100">
         <div class="row justify-content-left h-100">
@@ -11,33 +18,33 @@
                             <div class="row">
                                 <div class="col-md-10 mb-3 pb-2">
                                     <div data-mdb-input-init class="form-outline">
-                                        <input type="text" id="name" class="form-control form-control-lg" placeholder="Имя" />
+                                        <input type="text" id="name" class="form-control form-control-lg" placeholder="Имя" @bind-value="@name"/>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-10 mb-3 pb-2">
                                     <div data-mdb-input-init class="form-outline">
-                                        <input type="tel" id="phoneNumber" class="form-control form-control-lg" placeholder="Номер телефона" />
+                                        <input type="tel" id="phoneNumber" class="form-control form-control-lg" placeholder="Номер телефона" @bind-value="@phone" />
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-10 mb-3 pb-2">
                                     <div data-mdb-input-init class="form-outline">
-                                        <input type="email" id="emailAddress" class="form-control form-control-lg" placeholder="Электронная почта" />
+                                        <input type="email" id="emailAddress" class="form-control form-control-lg" placeholder="Электронная почта" @bind-value="@email" />
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-10 mb-3 pb-2">
                                     <div data-mdb-input-init class="form-outline">
-                                        <textarea type="tel" id="phoneNumber" class="form-control form-control-lg" rows="3" placeholder="Описание" />
+                                        <input type="text" class="form-control form-control-lg" placeholder="Описание" @bind-value="@description"/>
                                     </div>
                                 </div>
                             </div>
                             <div class="mt-1 pt-2">
-                                <input data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg" type="submit" value="Отправить" />
+                                <input data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg" type="submit" value="Отправить" @onclick="@SaveRequest"/>
                             </div>
                         </form>
                     </div>
@@ -51,6 +58,23 @@
         resize: none;
     }
 </style>
-@code {
 
+@code {
+    private string name = string.Empty;
+    private string phone = string.Empty;
+    private string email = string.Empty;
+    private string description = string.Empty;
+
+    private void SaveRequest()
+    {
+        Request nRequest = new Request();
+        nRequest.Name = name;
+        nRequest.Phone = phone;
+        nRequest.Email = email;
+        nRequest.Description = description;
+        nRequest.Datetime = DateTime.Now;
+
+        var result =
+            @Service.CreateRequestAsync(nRequest);
+    }
 }
