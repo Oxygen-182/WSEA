@@ -1,0 +1,91 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Главная страница</PageTitle>
+
+<section class="bg-light py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mb-3 text-primary fw-bold">Агентство недвижимости - WSEA</h2>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card my-3">
+
+                    <img src="https://venco.com.tr/wp-content/uploads/2021/04/venco-ventilation-the-quad-towers.jpg" class="card-image-top" alt="thumbnail">
+
+                    <div class="card-body">
+                        <h3 class="card-title"><a class="text-secondary">Что такое WSEA?</a></h3>
+                        <p class="card-text">WSEA — это организация, которая занимается оказанием услуг в сфере недвижимости</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card my-3">
+
+                    <img src="https://i.pinimg.com/originals/0a/e1/55/0ae155fb3ebf2a9d35775201a62d7543.jpg" class="card-image-top" alt="thumbnail">
+
+                    <div class="card-body">
+                        <h3 class="card-title"><a class="text-secondary">Why We Use HTML</a></h3>
+                        <p class="card-text">Агентства недвижимости предоставляют услуги по покупке, продаже и аренде недвижемости. Также основными видами деятельности являются: консультация и помощь в выборе недвижимости</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card my-3">
+
+                    <img src="https://i.pinimg.com/originals/0a/e1/55/0ae155fb3ebf2a9d35775201a62d7543.jpg" class="card-image-top" alt="thumbnail">
+                    <div class="card-body">
+                        <h3 class="card-title"><a class="text-secondary">Where do people came from?</a></h3>
+                        <p class="card-text">Pellentesque dictum consequat tincidunt. Sed tincidunt tortor nec vulputate gravida. Nam sapien nisi, malesuada at sapien suscipit,</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card my-3">
+                    <img src="https://i.pinimg.com/originals/0a/e1/55/0ae155fb3ebf2a9d35775201a62d7543.jpg" class="card-image-top" alt="thumbnail">
+                    <div class="card-body">
+                        <h3 class="card-title"><a class="text-secondary">What is Lorem Ipsum?</a></h3>
+                        <p class="card-text">Pellentesque dictum consequat tincidunt. Sed tincidunt tortor nec vulputate gravida. Nam sapien nisi, malesuada at sapien suscipit.</p>
+                    </div>
+                </div>
+            </div>
+
+            @* Заявка *@
+            <div class="col-md-6 col-lg-4">
+                <div class="card my-3">
+
+                    <img src="https://venco.com.tr/wp-content/uploads/2021/04/venco-ventilation-the-quad-towers.jpg" class="card-image-top" alt="thumbnail">
+                    <div class="card-body text-center">
+                        <h3 class="card-title"><a class="text-secondary">Where is my Pasta?</a></h3>
+                        <p class="card-text">Pellentesque dictum consequat tincidunt. Sed tincidunt tortor nec vulputate gravida. Nam sapien nisi, malesuada at sapien suscipit,</p>
+                        <button class="btn btn-danger" @onclick="@RedirectToFeedback">Оставить заявку</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card my-3">
+
+                    <img src="https://i.pinimg.com/originals/0a/e1/55/0ae155fb3ebf2a9d35775201a62d7543.jpg" class="card-image-top" alt="thumbnail">
+
+                    <div class="card-body">
+                        <h3 class="card-title"><a class="text-secondary">Why is sky blue ?</a></h3>
+                        <p class="card-text">Pellentesque dictum consequat tincidunt. Sed tincidunt tortor nec vulputate gravida. Nam sapien nisi, malesuada at sapien suscipit.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code{
+    private void RedirectToFeedback(){
+        NavigationManager.NavigateTo("/feedback", forceLoad: true);
+    }
+}
