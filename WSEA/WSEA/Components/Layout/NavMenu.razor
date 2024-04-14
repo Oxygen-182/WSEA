@@ -13,6 +13,16 @@
                 <a class="nav-link" aria-current="/" href="#">Главная</a>
                 <a class="nav-link" href="/catalog">Каталог недвижимости</a>
                 <a class="nav-link" href="/feedback">Контактная информация</a>
+
+                <AuthorizeView>
+                    <NotAuthorized>
+                        <a class="nav-link" href="/Account/Login">Риэлтору</a>
+                    </NotAuthorized>
+                    <Authorized>
+                        <a class="nav-link" href="/newrealty">Добавить недвижимость</a>
+                        <a class="nav-link">Добро пожаловать, @context.User.Identity.Name!</a>
+                    </Authorized>
+                </AuthorizeView>
             </div>
         </div>
     </div>

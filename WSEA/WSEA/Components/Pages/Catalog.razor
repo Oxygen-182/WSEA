@@ -3,7 +3,13 @@
 @using WSEA.Data
 @using WSEA.Data.WSEA
 
+@inject NavigationManager NavigationManager
+
 @inherits OwningComponentBase<WSEAService>
+
+@rendermode InteractiveServer
+
+<PageTitle>Каталог недвижимости</PageTitle>
 
 <section class="bg-light py-4">
     <div class="container">
@@ -20,7 +26,7 @@
                         <div class="card-body text-center">
                             <h3 class="card-title"><p class="text-secondary">@GetRealtyAddress(realty)</p></h3>
                             <p class="card-text">@realty.Description</p>
-                            <button class="btn btn-danger">Просмотреть</button>
+                            <button class="btn btn-danger" @onclick="() => NavigateToRealtyCard(realty.IdRealty.ToString())">Просмотреть</button>
                         </div>
                     </div>
                 </div>
@@ -32,6 +38,11 @@
 
 @code {
     private List<Realty> realties = new List<Realty>();
+
+    private void NavigateToRealtyCard(string realtyId)
+    {
+        NavigationManager.NavigateTo($"/catalog/{realtyId}", forceLoad: true);
+    }
 
     private string GetRealtyImage(Realty r)
     {
