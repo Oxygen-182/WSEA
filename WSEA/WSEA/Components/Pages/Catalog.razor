@@ -1,0 +1,74 @@
+﻿@page "/catalog"
+
+@using WSEA.Data
+@using WSEA.Data.WSEA
+
+@inject NavigationManager NavigationManager
+
+@inherits OwningComponentBase<WSEAService>
+
+@rendermode InteractiveServer
+
+<PageTitle>Квартиры и комнаты</PageTitle>
+
+<section class="bg-light py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mb-3 text-dark fw-bold text-center">Доступные предложения</h2>
+            </div>
+
+            @foreach (var realty in realties)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card my-3">
+                        <img src="@GetRealtyImage(realty)" class="card-image-top" alt="thumbnail">
+                        <div class="card-body text-center">
+                            <h3 class="card-title"><p class="text-secondary">@GetRealtyAddress(realty)</p></h3>
+                            <p class="card-text">@realty.Description</p>
+                            <button class="btn btn-danger" @onclick="() => NavigateToRealtyCard(realty.IdRealty.ToString())">Просмотреть</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+
+@code {
+    private List<Realty> realties = new List<Realty>();
+
+    private void NavigateToRealtyCard(string realtyId)
+    {
+        NavigationManager.NavigateTo($"/catalog/{realtyId}", forceLoad: true);
+    }
+
+    private string GetRealtyImage(Realty r)
+    {
+        string result = string.Empty;
+        try
+        {
+            result = r.RealtyImages.FirstOrDefault().ImagePath;
+        }
+        catch { result = "images/non_image.jpg"; }
+        return result;
+    }
+
+    private string GetRealtyAddress(Realty r)
+    {
+        string result = string.Empty;
+        if (r.District != null)
+            result = $"{r.City}, {r.District}, {r.Street}, {r.House}, {r.ApartmentNumber}";
+        else
+            result = $"{r.City}, {r.Street}, {r.House}, {r.ApartmentNumber}";
+
+        return result;
+    } 
+
+    protected override async Task OnInitializedAsync()
+    {
+        realties = 
+            await @Service.GetRealtiesAsync();
+    }
+}
