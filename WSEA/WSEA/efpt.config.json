@@ -15,23 +15,71 @@
    "T4TemplatePath": null,
    "Tables": [
       {
-         "Name": "[dbo].[Realties]",
+         "Name": "[dbo].[Canal]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Realtors]",
+         "Name": "[dbo].[Commerce]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[RealtyImages]",
+         "Name": "[dbo].[CommerceType]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[RealtyTypes]",
+         "Name": "[dbo].[FlatRoom]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Requests]",
+         "Name": "[dbo].[Heating]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[House]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[HouseType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Image]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Landplot]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LandplotType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Material]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Operation]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Realtor]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Realty]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Request]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Sanitary]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Water]",
          "ObjectType": 0
       }
    ],

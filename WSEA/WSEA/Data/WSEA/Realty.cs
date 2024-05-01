@@ -9,45 +9,47 @@ public partial class Realty
 {
     public int IdRealty { get; set; }
 
+    public DateOnly Date { get; set; }
+
     public string City { get; set; }
 
     public string District { get; set; }
 
     public string Street { get; set; }
 
-    public string House { get; set; }
+    public string HouseNumber { get; set; }
 
-    public string ApartmentNumber { get; set; }
-
-    public double? SquareObject { get; set; }
-
-    public double? SquareArea { get; set; }
-
-    public string Material { get; set; }
-
-    public int? RoomCount { get; set; }
-
-    public string Floor { get; set; }
+    public string FlatNumber { get; set; }
 
     public decimal Cost { get; set; }
 
-    public int? YearOfCommissioning { get; set; }
-
-    public bool BuildDone { get; set; }
-
-    public bool Rent { get; set; }
+    public bool SellOrRent { get; set; }
 
     public string CadastralNumber { get; set; }
 
     public string Description { get; set; }
 
-    public int RealtyTypeId { get; set; }
+    public string ArchiveReason { get; set; }
+
+    public int? IdFlatRoom { get; set; }
+
+    public int? IdHouse { get; set; }
+
+    public int? IdLandplot { get; set; }
+
+    public int? IdCommerce { get; set; }
 
     public int? IdRealtor { get; set; }
 
+    public virtual Commerce IdCommerceNavigation { get; set; }
+
+    public virtual FlatRoom IdFlatRoomNavigation { get; set; }
+
+    public virtual House IdHouseNavigation { get; set; }
+
+    public virtual Landplot IdLandplotNavigation { get; set; }
+
     public virtual Realtor IdRealtorNavigation { get; set; }
 
-    public virtual ICollection<RealtyImage> RealtyImages { get; set; } = new List<RealtyImage>();
-
-    public virtual RealtyType RealtyType { get; set; }
+    public virtual ICollection<Image> Images { get; set; } = new List<Image>();
 }

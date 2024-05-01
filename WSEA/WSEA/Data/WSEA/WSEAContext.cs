@@ -13,26 +13,297 @@ public partial class WSEAContext : DbContext
     {
     }
 
+    public virtual DbSet<Canal> Canals { get; set; }
+
+    public virtual DbSet<Commerce> Commerces { get; set; }
+
+    public virtual DbSet<CommerceType> CommerceTypes { get; set; }
+
+    public virtual DbSet<FlatRoom> FlatRooms { get; set; }
+
+    public virtual DbSet<Heating> Heatings { get; set; }
+
+    public virtual DbSet<House> Houses { get; set; }
+
+    public virtual DbSet<HouseType> HouseTypes { get; set; }
+
+    public virtual DbSet<Image> Images { get; set; }
+
+    public virtual DbSet<Landplot> Landplots { get; set; }
+
+    public virtual DbSet<LandplotType> LandplotTypes { get; set; }
+
+    public virtual DbSet<Material> Materials { get; set; }
+
+    public virtual DbSet<Operation> Operations { get; set; }
+
     public virtual DbSet<Realtor> Realtors { get; set; }
 
     public virtual DbSet<Realty> Realties { get; set; }
 
-    public virtual DbSet<RealtyImage> RealtyImages { get; set; }
-
-    public virtual DbSet<RealtyType> RealtyTypes { get; set; }
-
     public virtual DbSet<Request> Requests { get; set; }
+
+    public virtual DbSet<Sanitary> Sanitaries { get; set; }
+
+    public virtual DbSet<Water> Water { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
+
+        modelBuilder.Entity<Canal>(entity =>
+        {
+            entity.HasKey(e => e.IdCanal).HasName("PK__Canal");
+
+            entity.ToTable("Canal");
+
+            entity.Property(e => e.IdCanal).HasColumnName("id_canal");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(300)
+                .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<Commerce>(entity =>
+        {
+            entity.HasKey(e => e.IdCommerce).HasName("PK__Commerce");
+
+            entity.ToTable("Commerce");
+
+            entity.Property(e => e.IdCommerce).HasColumnName("id_commerce");
+            entity.Property(e => e.Floor).HasColumnName("floor");
+            entity.Property(e => e.FloorCount).HasColumnName("floor_count");
+            entity.Property(e => e.IdCommerceType).HasColumnName("id_commerceType");
+            entity.Property(e => e.IdMaterial).HasColumnName("id_material");
+            entity.Property(e => e.SquareArea).HasColumnName("square_area");
+            entity.Property(e => e.SquareObject).HasColumnName("square_object");
+
+            entity.HasOne(d => d.IdCommerceTypeNavigation).WithMany(p => p.Commerces)
+                .HasForeignKey(d => d.IdCommerceType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__id_commerceType");
+
+            entity.HasOne(d => d.IdMaterialNavigation).WithMany(p => p.Commerces)
+                .HasForeignKey(d => d.IdMaterial)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__id_materialCommerce");
+        });
+
+        modelBuilder.Entity<CommerceType>(entity =>
+        {
+            entity.HasKey(e => e.IdCommerceType).HasName("PK__CommerceType");
+
+            entity.ToTable("CommerceType");
+
+            entity.Property(e => e.IdCommerceType).HasColumnName("id_commerceType");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(300)
+                .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<FlatRoom>(entity =>
+        {
+            entity.HasKey(e => e.IdFlatRoom).HasName("PK__FlatRoom");
+
+            entity.ToTable("FlatRoom");
+
+            entity.Property(e => e.IdFlatRoom).HasColumnName("id_flatRoom");
+            entity.Property(e => e.Balcony).HasColumnName("balcony");
+            entity.Property(e => e.Elevator).HasColumnName("elevator");
+            entity.Property(e => e.FlatOrRoom).HasColumnName("flatOrRoom");
+            entity.Property(e => e.Floor).HasColumnName("floor");
+            entity.Property(e => e.FloorCount).HasColumnName("floor_count");
+            entity.Property(e => e.IdHeating).HasColumnName("id_heating");
+            entity.Property(e => e.IdMaterial).HasColumnName("id_material");
+            entity.Property(e => e.IdSanitary).HasColumnName("id_sanitary");
+            entity.Property(e => e.Loggia).HasColumnName("loggia");
+            entity.Property(e => e.RoomCount).HasColumnName("room_count");
+            entity.Property(e => e.SecOrNew).HasColumnName("secOrNew");
+            entity.Property(e => e.SquareKitchen).HasColumnName("square_kitchen");
+            entity.Property(e => e.SquareLiving).HasColumnName("square_living");
+            entity.Property(e => e.SquareObject).HasColumnName("square_object");
+            entity.Property(e => e.YearBuild).HasColumnName("yearBuild");
+
+            entity.HasOne(d => d.IdHeatingNavigation).WithMany(p => p.FlatRooms)
+                .HasForeignKey(d => d.IdHeating)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__id_heatingFlatRoom");
+
+            entity.HasOne(d => d.IdMaterialNavigation).WithMany(p => p.FlatRooms)
+                .HasForeignKey(d => d.IdMaterial)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__id_materialFlatRoom");
+
+            entity.HasOne(d => d.IdSanitaryNavigation).WithMany(p => p.FlatRooms)
+                .HasForeignKey(d => d.IdSanitary)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__id_sanitaryFlatRoom");
+        });
+
+        modelBuilder.Entity<Heating>(entity =>
+        {
+            entity.HasKey(e => e.IdHeating).HasName("PK__Heating");
+
+            entity.ToTable("Heating");
+
+            entity.Property(e => e.IdHeating).HasColumnName("id_heating");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(300)
+                .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<House>(entity =>
+        {
+            entity.HasKey(e => e.IdHouse).HasName("PK__House");
+
+            entity.ToTable("House");
+
+            entity.Property(e => e.IdHouse).HasColumnName("id_house");
+            entity.Property(e => e.FloorCount).HasColumnName("floor_count");
+            entity.Property(e => e.Gas).HasColumnName("gas");
+            entity.Property(e => e.IdCanal).HasColumnName("id_canal");
+            entity.Property(e => e.IdHeating).HasColumnName("id_heating");
+            entity.Property(e => e.IdHouseType).HasColumnName("id_houseType");
+            entity.Property(e => e.IdMaterial).HasColumnName("id_material");
+            entity.Property(e => e.IdSanitary).HasColumnName("id_sanitary");
+            entity.Property(e => e.IdWater).HasColumnName("id_water");
+            entity.Property(e => e.RoomCount).HasColumnName("room_count");
+            entity.Property(e => e.SquareArea).HasColumnName("square_area");
+            entity.Property(e => e.SquareKitchen).HasColumnName("square_kitchen");
+            entity.Property(e => e.SquareLiving).HasColumnName("square_living");
+            entity.Property(e => e.SquareObject).HasColumnName("square_object");
+            entity.Property(e => e.YearBuild).HasColumnName("yearBuild");
+
+            entity.HasOne(d => d.IdCanalNavigation).WithMany(p => p.Houses)
+                .HasForeignKey(d => d.IdCanal)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__id_canalHouse");
+
+            entity.HasOne(d => d.IdHeatingNavigation).WithMany(p => p.Houses)
+                .HasForeignKey(d => d.IdHeating)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__id_heatingHouse");
+
+            entity.HasOne(d => d.IdHouseTypeNavigation).WithMany(p => p.Houses)
+                .HasForeignKey(d => d.IdHouseType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__id_houseType");
+
+            entity.HasOne(d => d.IdMaterialNavigation).WithMany(p => p.Houses)
+                .HasForeignKey(d => d.IdMaterial)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__id_materialHouse");
+
+            entity.HasOne(d => d.IdSanitaryNavigation).WithMany(p => p.Houses)
+                .HasForeignKey(d => d.IdSanitary)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__id_sanitaryHouse");
+
+            entity.HasOne(d => d.IdWaterNavigation).WithMany(p => p.Houses)
+                .HasForeignKey(d => d.IdWater)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__id_waterHouse");
+        });
+
+        modelBuilder.Entity<HouseType>(entity =>
+        {
+            entity.HasKey(e => e.IdHouseType).HasName("PK__HouseType");
+
+            entity.ToTable("HouseType");
+
+            entity.Property(e => e.IdHouseType).HasColumnName("id_houseType");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(300)
+                .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<Image>(entity =>
+        {
+            entity.HasKey(e => e.IdImage).HasName("PK__Image");
+
+            entity.ToTable("Image");
+
+            entity.Property(e => e.IdImage).HasColumnName("id_image");
+            entity.Property(e => e.IdRealty).HasColumnName("id_realty");
+            entity.Property(e => e.ImagePath)
+                .IsRequired()
+                .HasColumnName("image_path");
+
+            entity.HasOne(d => d.IdRealtyNavigation).WithMany(p => p.Images)
+                .HasForeignKey(d => d.IdRealty)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__id_realtyImage");
+        });
+
+        modelBuilder.Entity<Landplot>(entity =>
+        {
+            entity.HasKey(e => e.IdLandplot).HasName("PK__Landplot");
+
+            entity.ToTable("Landplot");
+
+            entity.Property(e => e.IdLandplot).HasColumnName("id_landplot");
+            entity.Property(e => e.IdLandplotType).HasColumnName("id_landplotType");
+            entity.Property(e => e.SquareArea).HasColumnName("square_area");
+
+            entity.HasOne(d => d.IdLandplotTypeNavigation).WithMany(p => p.Landplots)
+                .HasForeignKey(d => d.IdLandplotType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__id_landplotType");
+        });
+
+        modelBuilder.Entity<LandplotType>(entity =>
+        {
+            entity.HasKey(e => e.IdLandplotType).HasName("PK__LandplotType");
+
+            entity.ToTable("LandplotType");
+
+            entity.Property(e => e.IdLandplotType).HasColumnName("id_landplotType");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(300)
+                .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<Material>(entity =>
+        {
+            entity.HasKey(e => e.IdMaterial).HasName("PK__Material");
+
+            entity.ToTable("Material");
+
+            entity.Property(e => e.IdMaterial).HasColumnName("id_material");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(300)
+                .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<Operation>(entity =>
+        {
+            entity.HasKey(e => e.IdOperation).HasName("PK__Operation");
+
+            entity.ToTable("Operation");
+
+            entity.Property(e => e.IdOperation).HasColumnName("id_operation");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(300)
+                .HasColumnName("name");
+        });
+
         modelBuilder.Entity<Realtor>(entity =>
         {
-            entity.HasKey(e => e.IdRealtor).HasName("PK__Realtors__318DB275EAEF5B9E");
+            entity.HasKey(e => e.IdRealtor).HasName("PK__Realtor");
+
+            entity.ToTable("Realtor");
 
             entity.Property(e => e.IdRealtor).HasColumnName("id_realtor");
-            entity.Property(e => e.AspNetUserId)
+            entity.Property(e => e.IdAspNetUsers)
                 .IsRequired()
-                .HasMaxLength(450);
+                .HasMaxLength(450)
+                .HasColumnName("id_AspNetUsers");
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(100)
@@ -52,13 +323,12 @@ public partial class WSEAContext : DbContext
 
         modelBuilder.Entity<Realty>(entity =>
         {
-            entity.HasKey(e => e.IdRealty).HasName("PK__Realties__EB07D997A22FAE47");
+            entity.HasKey(e => e.IdRealty).HasName("PK__Realty");
+
+            entity.ToTable("Realty");
 
             entity.Property(e => e.IdRealty).HasColumnName("id_realty");
-            entity.Property(e => e.ApartmentNumber)
-                .HasMaxLength(10)
-                .HasColumnName("apartment_number");
-            entity.Property(e => e.BuildDone).HasColumnName("buildDone");
+            entity.Property(e => e.ArchiveReason).HasColumnName("archive_reason");
             entity.Property(e => e.CadastralNumber)
                 .IsRequired()
                 .HasMaxLength(50)
@@ -70,74 +340,56 @@ public partial class WSEAContext : DbContext
             entity.Property(e => e.Cost)
                 .HasColumnType("decimal(20, 2)")
                 .HasColumnName("cost");
+            entity.Property(e => e.Date).HasColumnName("date");
             entity.Property(e => e.Description)
                 .IsRequired()
                 .HasColumnName("description");
             entity.Property(e => e.District)
                 .HasMaxLength(200)
                 .HasColumnName("district");
-            entity.Property(e => e.Floor)
+            entity.Property(e => e.FlatNumber)
                 .HasMaxLength(10)
-                .HasColumnName("floor");
-            entity.Property(e => e.House)
-                .IsRequired()
+                .HasColumnName("flat_number");
+            entity.Property(e => e.HouseNumber)
                 .HasMaxLength(10)
-                .HasColumnName("house");
+                .HasColumnName("house_number");
+            entity.Property(e => e.IdCommerce).HasColumnName("id_commerce");
+            entity.Property(e => e.IdFlatRoom).HasColumnName("id_flatRoom");
+            entity.Property(e => e.IdHouse).HasColumnName("id_house");
+            entity.Property(e => e.IdLandplot).HasColumnName("id_landplot");
             entity.Property(e => e.IdRealtor).HasColumnName("id_realtor");
-            entity.Property(e => e.Material)
-                .HasMaxLength(250)
-                .HasColumnName("material");
-            entity.Property(e => e.RealtyTypeId).HasColumnName("realty_type_id");
-            entity.Property(e => e.Rent).HasColumnName("rent");
-            entity.Property(e => e.RoomCount).HasColumnName("room_count");
-            entity.Property(e => e.SquareArea).HasColumnName("square_area");
-            entity.Property(e => e.SquareObject).HasColumnName("square_object");
+            entity.Property(e => e.SellOrRent).HasColumnName("sellOrRent");
             entity.Property(e => e.Street)
                 .IsRequired()
                 .HasMaxLength(200)
                 .HasColumnName("street");
-            entity.Property(e => e.YearOfCommissioning).HasColumnName("year_of_commissioning");
+
+            entity.HasOne(d => d.IdCommerceNavigation).WithMany(p => p.Realties)
+                .HasForeignKey(d => d.IdCommerce)
+                .HasConstraintName("FK__id_commerce");
+
+            entity.HasOne(d => d.IdFlatRoomNavigation).WithMany(p => p.Realties)
+                .HasForeignKey(d => d.IdFlatRoom)
+                .HasConstraintName("FK__id_flatRoom");
+
+            entity.HasOne(d => d.IdHouseNavigation).WithMany(p => p.Realties)
+                .HasForeignKey(d => d.IdHouse)
+                .HasConstraintName("FK__id_house");
+
+            entity.HasOne(d => d.IdLandplotNavigation).WithMany(p => p.Realties)
+                .HasForeignKey(d => d.IdLandplot)
+                .HasConstraintName("FK__id_landplot");
 
             entity.HasOne(d => d.IdRealtorNavigation).WithMany(p => p.Realties)
                 .HasForeignKey(d => d.IdRealtor)
-                .HasConstraintName("FK__Realties__id_rea__6C190EBB");
-
-            entity.HasOne(d => d.RealtyType).WithMany(p => p.Realties)
-                .HasForeignKey(d => d.RealtyTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Realties__realty__6B24EA82");
-        });
-
-        modelBuilder.Entity<RealtyImage>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__RealtyIm__3213E83F83B7A1F6");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.IdRealty).HasColumnName("id_realty");
-            entity.Property(e => e.ImagePath)
-                .IsRequired()
-                .HasColumnName("image_path");
-
-            entity.HasOne(d => d.IdRealtyNavigation).WithMany(p => p.RealtyImages)
-                .HasForeignKey(d => d.IdRealty)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__RealtyIma__id_re__6EF57B66");
-        });
-
-        modelBuilder.Entity<RealtyType>(entity =>
-        {
-            entity.HasKey(e => e.IdType).HasName("PK__RealtyTy__C3F091E0B10F63B6");
-
-            entity.Property(e => e.IdType).HasColumnName("id_type");
-            entity.Property(e => e.Type)
-                .IsRequired()
-                .HasMaxLength(250)
-                .HasColumnName("type");
+                .HasConstraintName("FK__id_realtorRealty");
         });
 
         modelBuilder.Entity<Request>(entity =>
         {
-            entity.HasKey(e => e.IdRequest).HasName("PK__Requests__7ADC39FCF8B79BE4");
+            entity.HasKey(e => e.IdRequest).HasName("PK__Request");
+
+            entity.ToTable("Request");
 
             entity.Property(e => e.IdRequest).HasColumnName("id_request");
             entity.Property(e => e.Datetime)
@@ -148,10 +400,11 @@ public partial class WSEAContext : DbContext
                 .IsRequired()
                 .HasMaxLength(300)
                 .HasColumnName("email");
+            entity.Property(e => e.IdOperation).HasColumnName("id_operation");
             entity.Property(e => e.IdRealtor).HasColumnName("id_realtor");
             entity.Property(e => e.Name)
                 .IsRequired()
-                .HasMaxLength(255)
+                .HasMaxLength(100)
                 .HasColumnName("name");
             entity.Property(e => e.Phone)
                 .IsRequired()
@@ -159,9 +412,37 @@ public partial class WSEAContext : DbContext
                 .HasColumnName("phone");
             entity.Property(e => e.Status).HasColumnName("status");
 
+            entity.HasOne(d => d.IdOperationNavigation).WithMany(p => p.Requests)
+                .HasForeignKey(d => d.IdOperation)
+                .HasConstraintName("FK__id_operation");
+
             entity.HasOne(d => d.IdRealtorNavigation).WithMany(p => p.Requests)
                 .HasForeignKey(d => d.IdRealtor)
-                .HasConstraintName("FK__Requests__id_rea__6477ECF3");
+                .HasConstraintName("FK__id_realtor");
+        });
+
+        modelBuilder.Entity<Sanitary>(entity =>
+        {
+            entity.HasKey(e => e.IdSanitary).HasName("PK__Sanitary");
+
+            entity.ToTable("Sanitary");
+
+            entity.Property(e => e.IdSanitary).HasColumnName("id_sanitary");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(300)
+                .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<Water>(entity =>
+        {
+            entity.HasKey(e => e.IdWater).HasName("PK__Water");
+
+            entity.Property(e => e.IdWater).HasColumnName("id_water");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(300)
+                .HasColumnName("name");
         });
 
         OnModelCreatingPartial(modelBuilder);

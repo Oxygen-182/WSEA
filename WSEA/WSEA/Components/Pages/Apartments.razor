@@ -1,0 +1,298 @@
+﻿@page "/apartments"
+
+@using WSEA.Data
+@using WSEA.Data.WSEA
+
+@inject NavigationManager NavigationManager
+
+@inherits OwningComponentBase<WSEAService>
+
+@rendermode InteractiveServer
+
+<PageTitle>Квартиры и комнаты</PageTitle>
+
+<section class="bg-light py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mb-3 text-dark fw-bold">Доступные предложения квартир и комнат</h2>
+            </div>
+            
+            <div class="col-12 bg-dark text-white row p-5 mb-4 pb-3">
+                <!-- Город -->
+                <div class="col-3 text-center">
+                    <p>Город: <InputSelect @bind-Value="@filterModel.City" class="form-control">
+                            <option value="">Не выбран</option>
+                        @if (realtyAparments != null)
+                        {
+                            @foreach (var rAp in realtyAparments)
+                            {
+                                <option value="@rAp.City.ToString()">@rAp.City</option>
+                            }
+                        }
+                        </InputSelect></p>
+                </div>
+                <!-- Район -->
+                <div class="col-3 text-center">
+                    <p>
+                        Район: <InputSelect @bind-Value="@filterModel!.District" class="form-control">
+                            <option value="">Не выбран</option>
+                            @if (realtyAparments != null)
+                            {
+                                @foreach (var rAp in realtyAparments)
+                                {
+                                    <option value="@rAp.District">@rAp.District</option>
+                                }
+                            }
+                        </InputSelect>
+                    </p>
+                </div>
+                <!-- Улица -->
+                <div class="col-3 text-center">
+                    <p>
+                        Улица: <InputSelect @bind-Value="@filterModel!.Street" class="form-control">
+                            <option value="">Не выбран</option>
+                            @if (realtyAparments != null)
+                            {
+                                @foreach (var rAp in realtyAparments)
+                                {
+                                    <option value="@rAp.Street">@rAp.Street</option>
+                                }
+                            }
+                        </InputSelect>
+                    </p>
+                </div>
+                <!-- Продажа/аренда -->
+                <div class="col-3 my-auto text-center">
+                    <p>
+                        Аренда: <InputCheckbox @bind-Value="filterModel.Rent" />
+                    </p>
+                </div>
+                <!-- Новостройка/вторичка -->
+                <div class="col-3 my-auto">
+                    <p class="m-0">
+                        <InputCheckbox @bind-Value="filterModel.NewBuild" /> Новостройка
+                    </p>
+                    <p>
+                        <InputCheckbox @bind-Value="filterModel.SecondBuild" /> Вторичный рынок
+                    </p>
+                </div>
+                <!-- Продажа/аренда -->
+                <div class="col-3 my-auto text-center">
+                    <p>
+                        Количество комнат: <InputNumber @bind-Value="filterModel.RoomCount" class="form-control" placeholder="Количество комнат"/>
+                    </p>
+                </div>
+                <!-- Количество этажей -->
+                <div class="col-3 text-center">
+                    <p class="m-0">
+                        Этаж:
+                    </p>
+                    <div class="row">
+                        <div class="w-50 m-0">
+                            <InputNumber @bind-Value="filterModel.FlootMinimum" class="form-control" placeholder="Минимум" />
+                        </div>
+                        <div class="w-50 m-0">
+                            <InputNumber @bind-Value="filterModel.FlootMaximum" class="form-control" placeholder="Максимум" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Цена -->
+                <div class="col-3 text-center">
+                    <p class="m-0">
+                        Цена:
+                    </p>
+                    <div class="row">
+                        <div class="w-50 m-0">
+                            <InputNumber @bind-Value="filterModel.CostMinimum" class="form-control" placeholder="Минимум" />
+                        </div>
+                        <div class="w-50 m-0">
+                            <InputNumber @bind-Value="filterModel.CostMaximum" class="form-control" placeholder="Максимум" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Площадь общая -->
+                <div class="col-3 text-center">
+                    <p class="m-0">
+                        Площадь общая:
+                    </p>
+                    <div class="row">
+                        <div class="w-50 m-0">
+                            <InputNumber @bind-Value="filterModel.SquareObjectMinimum" class="form-control" placeholder="Минимум" />
+                        </div>
+                        <div class="w-50 m-0">
+                            <InputNumber @bind-Value="filterModel.SquareObjectMaximum" class="form-control" placeholder="Максимум" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Площадь жилая -->
+                <div class="col-3 text-center">
+                    <p class="m-0">
+                        Площадь жилая:
+                    </p>
+                    <div class="row">
+                        <div class="w-50 m-0">
+                            <InputNumber @bind-Value="filterModel.LivingSquareMinumum" class="form-control" placeholder="Минимум" />
+                        </div>
+                        <div class="w-50 m-0">
+                            <InputNumber @bind-Value="filterModel.LivingSquareMaximum" class="form-control" placeholder="Максимум" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Площадь кухни -->
+                <div class="col-3 text-center">
+                    <p class="m-0">
+                        Площадь кухни:
+                    </p>
+                    <div class="row">
+                        <div class="w-50 m-0">
+                            <InputNumber @bind-Value="filterModel.KitchenSquareMinimum" class="form-control" placeholder="Минимум" />
+                        </div>
+                        <div class="w-50 m-0">
+                            <InputNumber @bind-Value="filterModel.KitchenSquareMaximum" class="form-control" placeholder="Максимум" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Тип санузла -->
+                <div class="col-3 text-center">
+                    <p>
+                        Тип санузла: <InputSelect @bind-Value="@filterModel.SanitaryId" class="form-control">
+                            <option value="-1">Не выбран</option>
+                            @if (sanitaries != null)
+                            {
+                                @foreach (var san in sanitaries)
+                                {
+                                    <option value="@san.IdSanitary">@san.Name</option>
+                                }
+                            }
+                        </InputSelect>
+                    </p>
+                </div>
+                <!-- Тип отопления -->
+                <div class="col-3 text-center">
+                    <p>
+                        Тип отопления: <InputSelect @bind-Value="@filterModel.HeatingId" class="form-control">
+                            <option value="-1">Не выбран</option>
+                            @if (heatings != null)
+                            {
+                                @foreach (var heat in heatings)
+                                {
+                                    <option value="@heat.IdHeating">@heat.Name</option>
+                                }
+                            }
+                        </InputSelect>
+                    </p>
+                </div>
+                <!-- Тип материала -->
+                <div class="col-3 text-center">
+                    <p>
+                        Тип материала: <InputSelect @bind-Value="@filterModel.MaterialId" class="form-control">
+                            <option value="-1">Не выбран</option>
+                            @if (materials != null)
+                            {
+                                @foreach (var mat in materials)
+                                {
+                                    <option value="@mat.IdMaterial">@mat.Name</option>
+                                }
+                            }
+                        </InputSelect>
+                    </p>
+                </div>
+                <!-- Лоджия/Балкон/Лифт -->
+                <div class="col-6 row my-auto">
+                    <div class="w-25">
+                        <InputCheckbox @bind-Value="filterModel.Loggia" /> Лоджия
+                    </div>
+                    <div class="w-25">
+                        <InputCheckbox @bind-Value="filterModel.Balcony" /> Балкон
+                    </div>
+                    <div class="w-25">
+                        <InputCheckbox @bind-Value="filterModel.Elevator" /> Лифт
+                    </div>
+                </div>
+                <!-- Найти -->
+                <div class="col-12 my-auto text-center mb-0">
+                    <button class="btn btn-primary w-25 mx-auto mb-3" @onclick="FindApartment">Искать</button>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <h2 class="mb-3 text-dark fw-bold text-center">Объявления</h2>
+            </div>
+
+            @foreach (var realty in realties)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card my-3">
+                        <img src="@GetRealtyImage(realty)" class="card-image-top" alt="thumbnail">
+                        <div class="card-body text-center">
+                            <h3 class="card-title"><p class="text-secondary">1234</p></h3>
+                            <p class="card-text">@realty.Description</p>
+                            <button class="btn btn-danger" @onclick="() => NavigateToRealtyCard(realty.IdRealty.ToString())">Просмотреть</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+
+@code {
+
+    private FilterModel filterModel = new FilterModel();
+
+    private List<Realty> realties = new List<Realty>();
+    private List<Realty> realtyAparments;
+    private List<Sanitary> sanitaries;
+    private List<Heating> heatings;
+    private List<Material> materials;
+
+    private bool reload = false;
+
+    private void NavigateToRealtyCard(string realtyId)
+    {
+        NavigationManager.NavigateTo($"/apartments/{realtyId}", forceLoad: true);
+    }
+
+    private async void FindApartment()
+    {
+        realties =
+            await Service.GetFilteredRealtyApartments(filterModel);
+
+        reload = !reload;
+
+        StateHasChanged();
+    }
+
+    private string GetRealtyImage(Realty r)
+    {
+        string result = string.Empty;
+        try
+        {
+            result = r.Images.FirstOrDefault().ImagePath;
+        }
+        catch { result = "images/non_image.jpg"; }
+        return result;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        realties = 
+            await Service.GetRealtiesAsync();
+        realtyAparments =
+            await Service.GetRealtyApartments();
+        sanitaries =
+            await Service.GetSanitaries();
+        heatings =
+            await Service.GetHeatings();
+        materials =
+            await Service.GetMaterials();
+
+        filterModel.City = realtyAparments.First().City;
+        filterModel.District = realtyAparments.First().District;
+        filterModel.Street = realtyAparments.First().Street;
+
+        StateHasChanged();
+    }
+}

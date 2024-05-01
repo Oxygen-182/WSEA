@@ -17,7 +17,7 @@ public partial class Realtor
 
     public string Phone { get; set; }
 
-    public string AspNetUserId { get; set; }
+    public string IdAspNetUsers { get; set; }
 
     public virtual ICollection<Realty> Realties { get; set; } = new List<Realty>();
 

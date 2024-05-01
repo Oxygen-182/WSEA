@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace WSEA.Data.WSEA;
 
-public partial class RealtyImage
+public partial class Image
 {
-    public int Id { get; set; }
+    public int IdImage { get; set; }
 
     public string ImagePath { get; set; }
 

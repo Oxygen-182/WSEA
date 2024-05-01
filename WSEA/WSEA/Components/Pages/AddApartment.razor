@@ -1,0 +1,164 @@
+﻿@page "/newapartment"
+
+@using WSEA.Data
+@using WSEA.Data.WSEA
+
+@inherits OwningComponentBase<WSEAService>
+
+@rendermode InteractiveServer
+
+
+<AuthorizeView>
+	<Authorized>
+		<div class="row">
+            <!-- Информация об объекте -->
+            <div class="w-50 mb-5 text-center">
+                <div class="card">
+                    <div class="card-header">
+                        Общая информация
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Загрузка изображений</h5>
+                        <InputFile multiple OnChange="@LoadFiles" />
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Информация об объекте</h5>
+                        <InputText @bind-Value="@nRealty.City" class="form-control w-50 mb-2 mx-auto" placeholder="Город"/>
+                        <InputText @bind-Value="@nRealty.District" class="form-control w-50 mb-2 mx-auto" placeholder="Район" />
+                        <InputText @bind-Value="@nRealty.Street" class="form-control w-50 mb-2 mx-auto" placeholder="Улица" />
+                        <InputText @bind-Value="@nRealty.HouseNumber" class="form-control w-50 mb-2 mx-auto" placeholder="Дом" />
+                        <InputText @bind-Value="@nRealty.FlatNumber" class="form-control w-50 mb-2 mx-auto" placeholder="Номер квартиры" />
+                        <InputNumber @bind-Value="@nRealty.Cost" class="form-control w-50 mb-2 mx-auto" placeholder="Цена" />
+                        <p><InputCheckbox @bind-Value="@nRealty.SellOrRent" class="mb-2 m-2" />Сдается в аренду</p>
+                        <InputText @bind-Value="@nRealty.CadastralNumber" class="form-control w-50 mb-2 mx-auto" placeholder="Кадастровый номер" />
+                        <InputTextArea @bind-Value="@nRealty.Description" class="form-control w-50 mb-2 mx-auto" placeholder="Описание" />
+                        <InputTextArea @bind-Value="@nRealty.ArchiveReason" class="form-control w-50 mb-2 mx-auto" placeholder="Причина помещения в архив" />
+                    </div>
+                </div>
+            </div>
+            <div class="w-50 mb-5 text-center">
+                <div class="card">
+                    <div class="card-header">
+                        Информация о квартире или комнате
+                    </div>
+                    <div class="card-body">
+                        <p>Площадь объекта <InputNumber @bind-Value="@nFlatroom.SquareObject" class="form-control w-50 mb-2 mx-auto" placeholder="Площадь объекта" /></p>
+                        <p>Жилая площадь<InputNumber @bind-Value="@nFlatroom.SquareLiving" class="form-control w-50 mb-2 mx-auto" placeholder="Жилая площадь" /></p>
+                        <p>Площадь кухни<InputNumber @bind-Value="@nFlatroom.SquareKitchen" class="form-control w-50 mb-2 mx-auto" placeholder="Площадь кухни" /></p>
+                        <p>Количество комнат<InputNumber @bind-Value="@nFlatroom.RoomCount" class="form-control w-50 mb-2 mx-auto" placeholder="Количество комнат" /></p>
+                        <p>Этаж<InputNumber @bind-Value="@nFlatroom.Floor" class="form-control w-50 mb-2 mx-auto" placeholder="Этаж" /></p>
+                        <p>Количество этажей<InputNumber @bind-Value="@nFlatroom.FloorCount" class="form-control w-50 mb-2 mx-auto" placeholder="Количество этажей" /></p>
+                        <p><InputCheckbox @bind-Value="@nFlatroom.Balcony" class="mb-2 m-2" />Имеется балкон</p>
+                        <p><InputCheckbox @bind-Value="@nFlatroom.Loggia" class="mb-2 m-2" />Имеется лоджия</p>
+                        <p><InputCheckbox @bind-Value="@nFlatroom.Elevator" class="mb-2 m-2" />Имеется лифт</p>
+                        <p><InputCheckbox @bind-Value="@nFlatroom.SecOrNew" class="mb-2 m-2" />Новостройка</p>
+                        <p><InputCheckbox @bind-Value="@nFlatroom.FlatOrRoom" class="mb-2 m-2" />Комната</p>
+                        <p>Год строительства<InputNumber @bind-Value="@nFlatroom.YearBuild" class="form-control w-50 mb-2 mx-auto" placeholder="Год строительства" /></p>
+                        <p>Тип санузла
+                            <InputSelect @bind-Value="@nFlatroom.IdSanitary">
+                            @if (sanitaries != null)
+                            {
+                                @foreach (var sanitary in sanitaries)
+                                {
+                                    <option value="@sanitary.IdSanitary">@sanitary.Name</option>
+                                }
+                            }
+                        </InputSelect></p>
+                        <p>
+                            Тип отопления
+                            <InputSelect @bind-Value="@nFlatroom.IdHeating">
+                                @if (heatings != null)
+                                {
+                                    @foreach (var heating in heatings)
+                                    {
+                                        <option value="@heating.IdHeating">@heating.Name</option>
+                                    }
+                                }
+                            </InputSelect>
+                        </p>
+                        <p>
+                            Тип материала
+                            <InputSelect @bind-Value="@nFlatroom.IdMaterial">
+                                @if (materials != null)
+                                {
+                                    @foreach (var material in materials)
+                                    {
+                                        <option value="@material.IdMaterial">@material.Name</option>
+                                    }
+                                }
+                            </InputSelect>
+                        </p>
+                    </div>
+                    <button class="btn btn-primary w-50 mx-auto mb-3" @onclick="SaveApartment">Сохранить</button>
+                </div>
+            </div>
+        </div>
+	</Authorized>
+	<NotAuthorized>
+		Вы не можете просмотреть эту страницу!
+	</NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private Realty nRealty = new Realty();
+    private FlatRoom nFlatroom = new FlatRoom();
+
+    private List<IBrowserFile> loadedFiles = new();
+    private int maxAllowedFiles = 5;
+
+    private List<Sanitary> sanitaries;
+    private List<Heating> heatings;
+    private List<Material> materials;
+
+    protected async override void OnInitialized()
+    {
+        sanitaries = await Service.GetSanitaries();
+        heatings = await Service.GetHeatings();
+        materials = await Service.GetMaterials();
+        StateHasChanged();
+        nFlatroom.IdSanitary = sanitaries.First().IdSanitary;
+        nFlatroom.IdHeating = heatings.First().IdHeating;
+        nFlatroom.IdMaterial = materials.First().IdMaterial;
+    }
+
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+            loadedFiles.Add(file);
+    }
+
+
+    private async void SaveApartment()
+    {
+        // Добавляем новую квартиру-комнату
+        var addNewFlatRoomResult = Service.CreateFlatroomAsync(nFlatroom);
+
+        // Привязываем квартиру-комнату к объекту
+        nRealty.IdFlatRoom = addNewFlatRoomResult.Result.IdFlatRoom;
+
+        // Добавляем новый объект
+        var addNewRealtyResult = Service.CreateRealtyAsync(nRealty);
+
+        // Добавляем фото
+        foreach (var file in loadedFiles)
+        {
+            var path = "wwwroot\\images\\" + file.Name;
+            var savePath = "images/" + file.Name;
+
+
+            var ms = new MemoryStream();
+            await file.OpenReadStream(5120000).CopyToAsync(ms);
+            using (FileStream newFile = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                ms.WriteTo(newFile);
+            }
+
+            Image nImage = new Image
+                {
+                    IdRealty = addNewRealtyResult.Result.IdRealty,
+                    ImagePath = savePath,
+                };
+            var addNewPhotoResult = Service.CreateRealtyImage(nImage);
+        }
+    }
+}

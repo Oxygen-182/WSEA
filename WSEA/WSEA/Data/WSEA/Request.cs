@@ -19,9 +19,13 @@ public partial class Request
 
     public string Description { get; set; }
 
-    public bool Status { get; set; }
+    public bool? Status { get; set; }
+
+    public int? IdOperation { get; set; }
 
     public int? IdRealtor { get; set; }
+
+    public virtual Operation IdOperationNavigation { get; set; }
 
     public virtual Realtor IdRealtorNavigation { get; set; }
 }

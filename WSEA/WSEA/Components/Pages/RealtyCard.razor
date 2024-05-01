@@ -1,4 +1,4 @@
-﻿@page "/catalog/{realtyIdParameter?}"
+﻿@page "/apartments/{realtyIdParameter?}"
 
 @using WSEA.Data
 @using WSEA.Data.WSEA
@@ -27,9 +27,9 @@
 
                 <div id="myCarousel" class="carousel slide bg-inverse" data-bs-ride="carousel">
                     <ol class="carousel-indicators">
-                        @if (Realty.RealtyImages.Count != 0)
+                        @if (Realty.Images.Count != 0)
                         {
-                            @for (int i = 0; i < Realty.RealtyImages.Count; i++)
+                            @for (int i = 0; i < Realty.Images.Count; i++)
                             {
                                 <li data-bs-target="#myCarousel" data-bs-slide-to="@i" class="active"></li>
                             }
@@ -40,20 +40,20 @@
                         }
                     </ol>
                     <div class="carousel-inner" role="listbox">
-                        @if (Realty.RealtyImages.Count != 0)
+                        @if (Realty.Images.Count != 0)
                         {
-                            @for (int i = 0; i < Realty.RealtyImages.Count; i++)
+                            @for (int i = 0; i < Realty.Images.Count; i++)
                             {
                                 if (i == 0)
                                 {
                                     <div class="carousel-item active">
-                                        <img class="d-block w-100 card-img-top" src="@Realty.RealtyImages.ToList()[i].ImagePath" alt="Первый слайд">
+                                        <img class="d-block w-100 card-img-top" src="@Realty.Images.ToList()[i].ImagePath" alt="Первый слайд">
                                     </div>
                                 }
                                 else
                                 {
                                     <div class="carousel-item">
-                                        <img class="d-block w-100 card-img-top" src="@Realty.RealtyImages.ToList()[i].ImagePath" alt="Первый слайд">
+                                        <img class="d-block w-100 card-img-top" src="@Realty.Images.ToList()[i].ImagePath" alt="Первый слайд">
                                     </div>
                                 }
                             }
@@ -92,24 +92,24 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Местонахождение</h5>
-                    <p class="card-text">Объект находится по адресу: @GetRealtyAddress()</p>
+                    <p class="card-text">Объект находится по адресу: </p>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Описание</h5>
                     <p class="card-text">
-                        Площадь объекта: @Realty.SquareObject м<small><sup>2</sup></small>
-                        <br />Площадь прилегающей территории: @Realty.SquareArea м<small><sup>2</sup></small></p>
+                        Площадь объекта:  м<small><sup>2</sup></small>
+                        <br />Площадь прилегающей территории: м<small><sup>2</sup></small></p>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Подробная информация</h5>
                     <p class="card-text">
-                        Материал: @Realty.Material<br />
-                        Количество комнат: @Realty.RoomCount<br />
-                        Количество этажей: @Realty.Floor<br />
-                        Год ввода в эксплуатацию: @Realty.YearOfCommissioning<br />
-                        Введен в эксплуатацию: @BuildDoneString<br />
-                        Сдается в аренду: @RentString<br />
-                        Кадастровый номер: @Realty.CadastralNumber<br />
+                        Материал: <br />
+                        Количество комнат: <br />
+                        Количество этажей: <br />
+                        Год ввода в эксплуатацию: <br />
+                        Введен в эксплуатацию: <br />
+                        Сдается в аренду: <br />
+                        Кадастровый номер: <br />
                     </p>
                     <p class="card-text"><b>Цена: @Realty.Cost₽</b></p>
                     <a href="#" class="btn btn-primary">Оформить заявку</a>
@@ -133,16 +133,6 @@ else
     private string BuildDoneString = "Нет";
     private string RentString = "Нет";
 
-    private string GetRealtyAddress()
-    {
-        string result = string.Empty;
-        if (Realty.District != null)
-            result = $"г. {Realty.City}, р-он {Realty.District}, ул. {Realty.Street}, д. {Realty.House}, кв. {Realty.ApartmentNumber}";
-        else
-            result = $"г. {Realty.City}, ул. {Realty.Street}, д. {Realty.House}, кв. {Realty.ApartmentNumber}";
-
-        return result;
-    }
 
     protected override void OnParametersSet()
     {
@@ -152,14 +142,5 @@ else
     protected override async Task OnInitializedAsync()
     {
         Realty = await Service.GetRealtyAsync(int.Parse(realtyIdParameter));
-
-        try
-        {
-            if (Realty.BuildDone)
-                BuildDoneString = "Да";
-            if (Realty.Rent)
-                RentString = "Да";
-        }
-        catch { }
     }
 }
