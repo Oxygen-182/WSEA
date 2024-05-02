@@ -12,7 +12,7 @@ namespace WSEA.Data
             _context = context;
         }
 
-        public async Task<List<Realty>> GetFilteredRealtyApartments(FilterModel model)
+        public List<Realty> GetFilteredRealtyApartments(FilterModel model)
         {
             IQueryable<Realty> request = _context.Set<Realty>();
 
@@ -20,10 +20,23 @@ namespace WSEA.Data
                 .AsNoTracking()
                 .Include(x => x.Images)
                 .Include(x => x.IdFlatRoomNavigation);
-                //.Where(x => x.SellOrRent == model.Rent
-                //&& x.IdFlatRoomNavigation.Elevator == model.Elevator
-                //&& x.IdFlatRoomNavigation.Balcony == model.Balcony
-                //&& x.IdFlatRoomNavigation.Loggia == model.Loggia);
+
+            // Rent 
+            if (model.Rent != 2)
+                request = request.Where(x => x.SellOrRent == (model.Rent == 1) ? true : false);
+            // Loggia
+            if (model.Loggia != 2)
+                request = request.Where(x => x.IdFlatRoomNavigation.Loggia == (model.Loggia == 1) ? true : false);
+            // Elevator
+            if (model.Elevator != 2)
+                request = request.Where(x => x.IdFlatRoomNavigation.Elevator == (model.Elevator == 1) ? true : false);
+            // Balcony
+            if (model.Balcony != 2)
+                request = request.Where(x => x.IdFlatRoomNavigation.Balcony == (model.Balcony == 1) ? true : false);
+
+            // Рынок
+            if (model.NewBuild != 2)
+                request = request.Where(x => x.IdFlatRoomNavigation.SecOrNew == (model.NewBuild == 1) ? true : false);
 
             if (!string.IsNullOrWhiteSpace(model.City))
                 request = request.Where(x => x.City == model.City);
@@ -95,14 +108,14 @@ namespace WSEA.Data
             else if (model.KitchenSquareMinimum == null && model.KitchenSquareMaximum != null)
                 request = request.Where(x => x.IdFlatRoomNavigation.SquareKitchen <= model.KitchenSquareMaximum);
 
-            //if (model.HeatingId != -1)
-            //    request = request.Where(x => x.IdFlatRoomNavigation.IdHeating == model.HeatingId);
-            //if (model.SanitaryId != -1)
-            //    request = request.Where(x => x.IdFlatRoomNavigation.IdSanitary == model.SanitaryId);
-            //if (model.MaterialId != -1)
-            //    request = request.Where(x => x.IdFlatRoomNavigation.IdMaterial == model.MaterialId);
+            if (model.HeatingId != 0)
+                request = request.Where(x => x.IdFlatRoomNavigation.IdHeating == model.HeatingId);
+            if (model.SanitaryId != 0)
+                request = request.Where(x => x.IdFlatRoomNavigation.IdSanitary == model.SanitaryId);
+            if (model.MaterialId != 0)
+                request = request.Where(x => x.IdFlatRoomNavigation.IdMaterial == model.MaterialId);
 
-            return await request.ToListAsync();
+            return request.ToList();
         }
 
         public async Task<List<Operation>> GetOperationsAsync()

@@ -35,7 +35,7 @@
                 <!-- Район -->
                 <div class="col-3 text-center">
                     <p>
-                        Район: <InputSelect @bind-Value="@filterModel!.District" class="form-control">
+                        Район: <InputSelect @bind-Value="@filterModel.District" class="form-control">
                             <option value="">Не выбран</option>
                             @if (realtyAparments != null)
                             {
@@ -50,7 +50,7 @@
                 <!-- Улица -->
                 <div class="col-3 text-center">
                     <p>
-                        Улица: <InputSelect @bind-Value="@filterModel!.Street" class="form-control">
+                        Улица: <InputSelect @bind-Value="@filterModel.Street" class="form-control">
                             <option value="">Не выбран</option>
                             @if (realtyAparments != null)
                             {
@@ -63,21 +63,26 @@
                     </p>
                 </div>
                 <!-- Продажа/аренда -->
-                <div class="col-3 my-auto text-center">
+                <div class="col-3 text-center">
                     <p>
-                        Аренда: <InputCheckbox @bind-Value="filterModel.Rent" />
+                        Реализация: <InputSelect @bind-Value="@filterModel.Rent" class="form-control">
+                            <option value="2">Не выбран</option>
+                            <option value="1">Продажа</option>
+                            <option value="0">Аренда</option>
+                        </InputSelect>
                     </p>
                 </div>
                 <!-- Новостройка/вторичка -->
-                <div class="col-3 my-auto">
-                    <p class="m-0">
-                        <InputCheckbox @bind-Value="filterModel.NewBuild" /> Новостройка
-                    </p>
+                <div class="col-3 text-center">
                     <p>
-                        <InputCheckbox @bind-Value="filterModel.SecondBuild" /> Вторичный рынок
+                        Тип рынка: <InputSelect @bind-Value="@filterModel.NewBuild" class="form-control">
+                            <option value="2">Не выбран</option>
+                            <option value="1">Первичный</option>
+                            <option value="0">Вторичный</option>
+                        </InputSelect>
                     </p>
                 </div>
-                <!-- Продажа/аренда -->
+                <!-- Количество комнат -->
                 <div class="col-3 my-auto text-center">
                     <p>
                         Количество комнат: <InputNumber @bind-Value="filterModel.RoomCount" class="form-control" placeholder="Количество комнат"/>
@@ -157,7 +162,7 @@
                 <div class="col-3 text-center">
                     <p>
                         Тип санузла: <InputSelect @bind-Value="@filterModel.SanitaryId" class="form-control">
-                            <option value="-1">Не выбран</option>
+                            <option value="0">Не выбран</option>
                             @if (sanitaries != null)
                             {
                                 @foreach (var san in sanitaries)
@@ -172,7 +177,7 @@
                 <div class="col-3 text-center">
                     <p>
                         Тип отопления: <InputSelect @bind-Value="@filterModel.HeatingId" class="form-control">
-                            <option value="-1">Не выбран</option>
+                            <option value="0">Не выбран</option>
                             @if (heatings != null)
                             {
                                 @foreach (var heat in heatings)
@@ -187,7 +192,7 @@
                 <div class="col-3 text-center">
                     <p>
                         Тип материала: <InputSelect @bind-Value="@filterModel.MaterialId" class="form-control">
-                            <option value="-1">Не выбран</option>
+                            <option value="0">Не выбран</option>
                             @if (materials != null)
                             {
                                 @foreach (var mat in materials)
@@ -199,16 +204,32 @@
                     </p>
                 </div>
                 <!-- Лоджия/Балкон/Лифт -->
-                <div class="col-6 row my-auto">
-                    <div class="w-25">
-                        <InputCheckbox @bind-Value="filterModel.Loggia" /> Лоджия
-                    </div>
-                    <div class="w-25">
-                        <InputCheckbox @bind-Value="filterModel.Balcony" /> Балкон
-                    </div>
-                    <div class="w-25">
-                        <InputCheckbox @bind-Value="filterModel.Elevator" /> Лифт
-                    </div>
+                <div class="col-6 text-center">
+                    <p>
+                        Лоджия: <InputSelect @bind-Value="@filterModel.Loggia" class="form-control w-50 mx-auto">
+                            <option value="2">Не выбран</option>
+                            <option value="1">Да</option>
+                            <option value="0">Нет</option>
+                        </InputSelect>
+                    </p>
+                </div>
+                <div class="col-3 text-center">
+                    <p>
+                        Балкон: <InputSelect @bind-Value="@filterModel.Balcony" class="form-control">
+                            <option value="2">Не выбран</option>
+                            <option value="1">Да</option>
+                            <option value="0">Нет</option>
+                        </InputSelect>
+                    </p>
+                </div>
+                <div class="col-3 text-center">
+                    <p>
+                        Лифт: <InputSelect @bind-Value="@filterModel.Elevator" class="form-control">
+                            <option value="2">Не выбран</option>
+                            <option value="1">Да</option>
+                            <option value="0">Нет</option>
+                        </InputSelect>
+                    </p>
                 </div>
                 <!-- Найти -->
                 <div class="col-12 my-auto text-center mb-0">
@@ -248,21 +269,16 @@
     private List<Heating> heatings;
     private List<Material> materials;
 
-    private bool reload = false;
-
     private void NavigateToRealtyCard(string realtyId)
     {
         NavigationManager.NavigateTo($"/apartments/{realtyId}", forceLoad: true);
     }
 
-    private async void FindApartment()
+    private void FindApartment()
     {
         realties =
-            await Service.GetFilteredRealtyApartments(filterModel);
+            Service.GetFilteredRealtyApartments(filterModel);
 
-        reload = !reload;
-
-        StateHasChanged();
     }
 
     private string GetRealtyImage(Realty r)
