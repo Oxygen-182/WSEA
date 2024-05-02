@@ -85,37 +85,45 @@
         </div>
         <!-- Конец карусели -->
 
-        <div class="col-md-6 col-lg-4 m-5">
-            <div class="card">
-                <div class="card-header">
-                    Информация об объекте
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Местонахождение</h5>
-                    <p class="card-text">Объект находится по адресу: </p>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Метраж</h5>
-                    <p class="card-text">
-                        Площадь объекта:  м<small><sup>2</sup></small>
-                        <br />Площадь прилегающей территории: м<small><sup>2</sup></small></p>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Подробная информация</h5>
-                    <p class="card-text">
-                        Материал: <br />
-                        Количество комнат: <br />
-                        Количество этажей: <br />
-                        Год ввода в эксплуатацию: <br />
-                        Введен в эксплуатацию: <br />
-                        Сдается в аренду: <br />
-                        Кадастровый номер: <br />
-                    </p>
-                    <p class="card-text"><b>Цена: @Realty.Cost₽</b></p>
-                    <a href="/feedback" class="btn btn-primary">Оформить заявку</a>
+        @if (Realty.IdFlatRoomNavigation != null)
+        {
+            <!--Для FlatRoom-->
+            <div class="col-md-6 col-lg-4 m-5">
+                <div class="card">
+                    <div class="card-header">
+                        Информация об объекте
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Местонахождение</h5>
+                        <p class="card-text">Объект находится по адресу: @GetAddress(Realty.City, Realty.District, Realty.Street)</p>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Тип объекта: @GetFlatroomType()</h5>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Метраж</h5>
+                        <p class="card-text">
+                            Площадь объекта: @Realty.IdFlatRoomNavigation.SquareObject м<small><sup>2</sup></small>
+                            <br />Жилая площадь: @Realty.IdFlatRoomNavigation.SquareLiving м<small><sup>2</sup></small>
+                            <br />Площадь кухни: @Realty.IdFlatRoomNavigation.SquareKitchen м<small><sup>2</sup></small>
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Подробная информация</h5>
+                        <p class="card-text">
+                            Материал: @Realty.IdFlatRoomNavigation.IdMaterialNavigation.Name<br />
+                            Количество комнат: @Realty.IdFlatRoomNavigation.RoomCount<br />
+                            Количество этажей: @Realty.IdFlatRoomNavigation.FloorCount<br />
+                            Год ввода в эксплуатацию: @Realty.IdFlatRoomNavigation.YearBuild <br />
+                            Сдается в аренду: @GetRealtyRent()<br />
+                            Кадастровый номер: @Realty.CadastralNumber<br />
+                        </p>
+                        <p class="card-text"><b>Цена: @Realty.Cost₽</b></p>
+                        <a href="/feedback" class="btn btn-primary">Оформить заявку</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
 }
 else
@@ -133,6 +141,14 @@ else
     private string BuildDoneString = "Нет";
     private string RentString = "Нет";
 
+    private string GetRealtyRent()
+        => Realty.SellOrRent ? "Да" : "Нет";
+
+    private string GetFlatroomType()
+        => Realty.IdFlatRoomNavigation.FlatOrRoom ? "Комната" : "Квартира";
+
+    private string GetAddress(string city, string district, string street)
+        => $"г. {city}, р-он. {district}, ул. {street}";
 
     protected override void OnParametersSet()
     {

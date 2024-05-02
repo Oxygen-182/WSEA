@@ -175,6 +175,12 @@ namespace WSEA.Data
                 .AsNoTracking()
                 .Where(x => x.IdRealty == id_realty)
                 .Include(x => x.Images)
+                .Include(x => x.IdCommerceNavigation)
+                .Include(x => x.IdFlatRoomNavigation)
+                .Include(x => x.IdFlatRoomNavigation.IdMaterialNavigation)
+                .Include(x => x.IdHouseNavigation)
+                .Include(x => x.IdLandplotNavigation)
+                .Include(x => x.IdLandplotNavigation)
                 .FirstOrDefaultAsync();
         }
 
