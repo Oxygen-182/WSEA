@@ -329,6 +329,7 @@
         // Добавляем новый объект коммерции
         var addNewCommerceResult = await Service.CreateCommerceAsync(nCommerce);
 
+        nRealty.Date = DateOnly.Parse(DateTime.Now.Date.ToShortDateString());
         nRealty.IdCommerce = addNewCommerceResult.IdCommerce;
 
         // Добавляем новый объект
@@ -362,6 +363,7 @@
         // Добавляем новый дом
         var addNewHouseResult = await Service.CreateHouseAsync(nHouse);
 
+        nRealty.Date = DateOnly.Parse(DateTime.Now.Date.ToShortDateString());
         nRealty.IdHouse = addNewHouseResult.IdHouse;
 
         // Добавляем новый объект
@@ -395,6 +397,7 @@
         // Добавляем новый земельный участок
         var addNewLandplotResult = await Service.CreateLandplotAsync(nLandplot);
 
+        nRealty.Date = DateOnly.Parse(DateTime.Now.Date.ToShortDateString());
         nRealty.IdLandplot = addNewLandplotResult.IdLandplot;
 
         // Добавляем новый объект
@@ -429,6 +432,7 @@
         var addNewFlatRoomResult = Service.CreateFlatroomAsync(nFlatroom);
 
         // Привязываем квартиру-комнату к объекту
+        nRealty.Date = DateOnly.Parse(DateTime.Now.Date.ToShortDateString());
         nRealty.IdFlatRoom = addNewFlatRoomResult.Result.IdFlatRoom;
 
         // Добавляем новый объект
