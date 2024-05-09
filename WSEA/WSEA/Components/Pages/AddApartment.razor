@@ -22,7 +22,12 @@
                         <InputFile multiple OnChange="@LoadFiles" />
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">Информация об объекте</h5>
+                        <InputRadioGroup @bind-Value="addModel.realtyType">
+                            <InputRadio Value="@AddRealtyModel.AddingType.Flatroom" /> Квартира или комната
+                            <InputRadio Value="@AddRealtyModel.AddingType.Lantplot" /> Земельный участок
+                            <InputRadio Value="@AddRealtyModel.AddingType.House" /> Дом
+                            <InputRadio Value="@AddRealtyModel.AddingType.Commerce" /> Коммерция
+                        </InputRadioGroup>
                         <InputText @bind-Value="@nRealty.City" class="form-control w-50 mb-2 mx-auto" placeholder="Город"/>
                         <InputText @bind-Value="@nRealty.District" class="form-control w-50 mb-2 mx-auto" placeholder="Район" />
                         <InputText @bind-Value="@nRealty.Street" class="form-control w-50 mb-2 mx-auto" placeholder="Улица" />
@@ -36,62 +41,225 @@
                     </div>
                 </div>
             </div>
-            <div class="w-50 mb-5 text-center">
-                <div class="card">
-                    <div class="card-header">
-                        Информация о квартире или комнате
-                    </div>
-                    <div class="card-body">
-                        <p>Площадь объекта <InputNumber @bind-Value="@nFlatroom.SquareObject" class="form-control w-50 mb-2 mx-auto" placeholder="Площадь объекта" /></p>
-                        <p>Жилая площадь<InputNumber @bind-Value="@nFlatroom.SquareLiving" class="form-control w-50 mb-2 mx-auto" placeholder="Жилая площадь" /></p>
-                        <p>Площадь кухни<InputNumber @bind-Value="@nFlatroom.SquareKitchen" class="form-control w-50 mb-2 mx-auto" placeholder="Площадь кухни" /></p>
-                        <p>Количество комнат<InputNumber @bind-Value="@nFlatroom.RoomCount" class="form-control w-50 mb-2 mx-auto" placeholder="Количество комнат" /></p>
-                        <p>Этаж<InputNumber @bind-Value="@nFlatroom.Floor" class="form-control w-50 mb-2 mx-auto" placeholder="Этаж" /></p>
-                        <p>Количество этажей<InputNumber @bind-Value="@nFlatroom.FloorCount" class="form-control w-50 mb-2 mx-auto" placeholder="Количество этажей" /></p>
-                        <p><InputCheckbox @bind-Value="@nFlatroom.Balcony" class="mb-2 m-2" />Имеется балкон</p>
-                        <p><InputCheckbox @bind-Value="@nFlatroom.Loggia" class="mb-2 m-2" />Имеется лоджия</p>
-                        <p><InputCheckbox @bind-Value="@nFlatroom.Elevator" class="mb-2 m-2" />Имеется лифт</p>
-                        <p><InputCheckbox @bind-Value="@nFlatroom.SecOrNew" class="mb-2 m-2" />Новостройка</p>
-                        <p><InputCheckbox @bind-Value="@nFlatroom.FlatOrRoom" class="mb-2 m-2" />Комната</p>
-                        <p>Год строительства<InputNumber @bind-Value="@nFlatroom.YearBuild" class="form-control w-50 mb-2 mx-auto" placeholder="Год строительства" /></p>
-                        <p>Тип санузла
-                            <InputSelect @bind-Value="@nFlatroom.IdSanitary">
-                            @if (sanitaries != null)
-                            {
-                                @foreach (var sanitary in sanitaries)
+
+            @if (addModel.realtyType == AddRealtyModel.AddingType.Flatroom){
+                <div class="w-50 mb-5 text-center">
+                    <div class="card">
+                        <div class="card-header">
+                            Информация о квартире или комнате
+                        </div>
+                        <div class="card-body">
+                            <p>Площадь объекта <InputNumber @bind-Value="@nFlatroom.SquareObject" class="form-control w-50 mb-2 mx-auto" placeholder="Площадь объекта" /></p>
+                            <p>Жилая площадь<InputNumber @bind-Value="@nFlatroom.SquareLiving" class="form-control w-50 mb-2 mx-auto" placeholder="Жилая площадь" /></p>
+                            <p>Площадь кухни<InputNumber @bind-Value="@nFlatroom.SquareKitchen" class="form-control w-50 mb-2 mx-auto" placeholder="Площадь кухни" /></p>
+                            <p>Количество комнат<InputNumber @bind-Value="@nFlatroom.RoomCount" class="form-control w-50 mb-2 mx-auto" placeholder="Количество комнат" /></p>
+                            <p>Этаж<InputNumber @bind-Value="@nFlatroom.Floor" class="form-control w-50 mb-2 mx-auto" placeholder="Этаж" /></p>
+                            <p>Количество этажей<InputNumber @bind-Value="@nFlatroom.FloorCount" class="form-control w-50 mb-2 mx-auto" placeholder="Количество этажей" /></p>
+                            <p><InputCheckbox @bind-Value="@nFlatroom.Balcony" class="mb-2 m-2" />Имеется балкон</p>
+                            <p><InputCheckbox @bind-Value="@nFlatroom.Loggia" class="mb-2 m-2" />Имеется лоджия</p>
+                            <p><InputCheckbox @bind-Value="@nFlatroom.Elevator" class="mb-2 m-2" />Имеется лифт</p>
+                            <p><InputCheckbox @bind-Value="@nFlatroom.SecOrNew" class="mb-2 m-2" />Новостройка</p>
+                            <p><InputCheckbox @bind-Value="@nFlatroom.FlatOrRoom" class="mb-2 m-2" />Комната</p>
+                            <p>Год строительства<InputNumber @bind-Value="@nFlatroom.YearBuild" class="form-control w-50 mb-2 mx-auto" placeholder="Год строительства" /></p>
+                            <p>Тип санузла
+                                <InputSelect @bind-Value="@nFlatroom.IdSanitary">
+                                @if (sanitaries != null)
                                 {
-                                    <option value="@sanitary.IdSanitary">@sanitary.Name</option>
-                                }
-                            }
-                        </InputSelect></p>
-                        <p>
-                            Тип отопления
-                            <InputSelect @bind-Value="@nFlatroom.IdHeating">
-                                @if (heatings != null)
-                                {
-                                    @foreach (var heating in heatings)
+                                    @foreach (var sanitary in sanitaries)
                                     {
-                                        <option value="@heating.IdHeating">@heating.Name</option>
+                                        <option value="@sanitary.IdSanitary">@sanitary.Name</option>
                                     }
                                 }
-                            </InputSelect>
-                        </p>
-                        <p>
-                            Тип материала
-                            <InputSelect @bind-Value="@nFlatroom.IdMaterial">
-                                @if (materials != null)
-                                {
-                                    @foreach (var material in materials)
+                            </InputSelect></p>
+                            <p>
+                                Тип отопления
+                                <InputSelect @bind-Value="@nFlatroom.IdHeating">
+                                    @if (heatings != null)
                                     {
-                                        <option value="@material.IdMaterial">@material.Name</option>
+                                        @foreach (var heating in heatings)
+                                        {
+                                            <option value="@heating.IdHeating">@heating.Name</option>
+                                        }
                                     }
-                                }
-                            </InputSelect>
-                        </p>
+                                </InputSelect>
+                            </p>
+                            <p>
+                                Тип материала
+                                <InputSelect @bind-Value="@nFlatroom.IdMaterial">
+                                    @if (materials != null)
+                                    {
+                                        @foreach (var material in materials)
+                                        {
+                                            <option value="@material.IdMaterial">@material.Name</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </p>
+                        </div>
+                        <button class="btn btn-primary w-50 mx-auto mb-3" @onclick="SaveApartment">Сохранить</button>
                     </div>
-                    <button class="btn btn-primary w-50 mx-auto mb-3" @onclick="SaveApartment">Сохранить</button>
                 </div>
-            </div>
+            }
+            else if (addModel.realtyType == AddRealtyModel.AddingType.Lantplot)
+            {
+                <div class="w-50 mb-5 text-center">
+                    <div class="card">
+                        <div class="card-header">
+                            Информация о земельном участке
+                        </div>
+                        <div class="card-body">
+                            <p>Площадь объекта <InputNumber @bind-Value="@nLandplot.SquareArea" class="form-control w-50 mb-2 mx-auto" placeholder="Площадь объекта" /></p>
+                            <p>
+                                Тип земельного участка:
+                                <InputSelect @bind-Value="@nLandplot.IdLandplotType">
+                                    @if (landplotTypes != null)
+                                    {
+                                        @foreach (var type in landplotTypes)
+                                        {
+                                            <option value="@type.IdLandplotType">@type.Name</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </p>
+                        </div>
+                        <button class="btn btn-primary w-50 mx-auto mb-3" @onclick="SaveLandplot">Сохранить</button>
+                    </div>
+                </div>
+            }
+            else if (addModel.realtyType == AddRealtyModel.AddingType.House)
+            {
+                <div class="w-50 mb-5 text-center">
+                    <div class="card">
+                        <div class="card-header">
+                            Информация о доме
+                        </div>
+                        <div class="card-body">
+                            <p>Площадь объекта <InputNumber @bind-Value="@nHouse.SquareObject" class="form-control w-50 mb-2 mx-auto" placeholder="Площадь объекта" /></p>
+                            <p>Жилая площадь<InputNumber @bind-Value="@nHouse.SquareLiving" class="form-control w-50 mb-2 mx-auto" placeholder="Жилая площадь" /></p>
+                            <p>Площадь кухни<InputNumber @bind-Value="@nHouse.SquareKitchen" class="form-control w-50 mb-2 mx-auto" placeholder="Площадь кухни" /></p>
+                            <p>Площадь прилегающей территории<InputNumber @bind-Value="@nHouse.SquareArea" class="form-control w-50 mb-2 mx-auto" placeholder="Площадь прилегающей территории" /></p>
+                            <p>Количество комнат<InputNumber @bind-Value="@nHouse.RoomCount" class="form-control w-50 mb-2 mx-auto" placeholder="Количество комнат" /></p>
+                            <p>Количество этажей<InputNumber @bind-Value="@nHouse.FloorCount" class="form-control w-50 mb-2 mx-auto" placeholder="Количество этажей" /></p>
+                            <p><InputCheckbox @bind-Value="@nHouse.Gas" class="mb-2 m-2" />Имеется газ</p>
+                            <p>Год строительства<InputNumber @bind-Value="@nHouse.YearBuild" class="form-control w-50 mb-2 mx-auto" placeholder="Год строительства" /></p>
+                            <p>
+                                Тип санузла
+                                <InputSelect @bind-Value="@nHouse.IdSanitary">
+                                    @if (sanitaries != null)
+                                    {
+                                        @foreach (var sanitary in sanitaries)
+                                        {
+                                            <option value="@sanitary.IdSanitary">@sanitary.Name</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </p>
+                            <p>
+                                Тип отопления
+                                <InputSelect @bind-Value="@nHouse.IdHeating">
+                                    @if (heatings != null)
+                                    {
+                                        @foreach (var heating in heatings)
+                                        {
+                                            <option value="@heating.IdHeating">@heating.Name</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </p>
+                            <p>
+                                Тип материала
+                                <InputSelect @bind-Value="@nHouse.IdMaterial">
+                                    @if (materials != null)
+                                    {
+                                        @foreach (var material in materials)
+                                        {
+                                            <option value="@material.IdMaterial">@material.Name</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </p>
+                            <p>
+                                Тип водоснабжения
+                                <InputSelect @bind-Value="@nHouse.IdWater">
+                                    @if (materials != null)
+                                    {
+                                        @foreach (var water in waters)
+                                        {
+                                            <option value="@water.IdWater">@water.Name</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </p>
+                            <p>
+                                Тип канализации
+                                <InputSelect @bind-Value="@nHouse.IdCanal">
+                                    @if (canals != null)
+                                    {
+                                        @foreach (var canal in canals)
+                                        {
+                                            <option value="@canal.IdCanal">@canal.Name</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </p>
+                            <p>
+                                Тип дома
+                                <InputSelect @bind-Value="@nHouse.IdHouseType">
+                                    @if (canals != null)
+                                    {
+                                        @foreach (var type in houseTypes)
+                                        {
+                                            <option value="@type.IdHouseType">@type.Name</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </p>
+                        </div>
+                        <button class="btn btn-primary w-50 mx-auto mb-3" @onclick="SaveHouse">Сохранить</button>
+                    </div>
+                </div>
+            }
+            else if (addModel.realtyType == AddRealtyModel.AddingType.Commerce)
+            {
+                <div class="w-50 mb-5 text-center">
+                    <div class="card">
+                        <div class="card-header">
+                            Информация о объекте коммерции
+                        </div>
+                        <div class="card-body">
+                            <p>Площадь объекта <InputNumber @bind-Value="@nCommerce.SquareObject" class="form-control w-50 mb-2 mx-auto" placeholder="Площадь объекта" /></p>
+                            <p>Площадь прилегающей территории<InputNumber @bind-Value="@nCommerce.SquareArea" class="form-control w-50 mb-2 mx-auto" placeholder="Площадь прилегающей территории" /></p>
+                            <p>Этаж<InputNumber @bind-Value="@nCommerce.Floor" class="form-control w-50 mb-2 mx-auto" placeholder="Этаж" /></p>
+                            <p>Количество этажей<InputNumber @bind-Value="@nCommerce.FloorCount" class="form-control w-50 mb-2 mx-auto" placeholder="Количество этажей" /></p>
+                            <p>
+                                Тип материала
+                                <InputSelect @bind-Value="@nCommerce.IdMaterial">
+                                    @if (materials != null)
+                                    {
+                                        @foreach (var material in materials)
+                                        {
+                                            <option value="@material.IdMaterial">@material.Name</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </p>
+                            <p>
+                                Тип объекта коммерции
+                                <InputSelect @bind-Value="@nCommerce.IdCommerceType">
+                                    @if (commerceTypes != null)
+                                    {
+                                        @foreach (var type in commerceTypes)
+                                        {
+                                            <option value="@type.IdCommerceType">@type.Name</option>
+                                        }
+                                    }
+                                </InputSelect>
+                            </p>
+                        </div>
+                        <button class="btn btn-primary w-50 mx-auto mb-3" @onclick="SaveCommerce">Сохранить</button>
+                    </div>
+                </div>
+            }
         </div>
 	</Authorized>
 	<NotAuthorized>
@@ -101,7 +269,12 @@
 
 @code {
     private Realty nRealty = new Realty();
+    private Landplot nLandplot = new Landplot();
+    private House nHouse = new House();
     private FlatRoom nFlatroom = new FlatRoom();
+    private Commerce nCommerce = new Commerce();
+
+    private AddRealtyModel addModel = new AddRealtyModel();
 
     private List<IBrowserFile> loadedFiles = new();
     private int maxAllowedFiles = 5;
@@ -109,16 +282,40 @@
     private List<Sanitary> sanitaries;
     private List<Heating> heatings;
     private List<Material> materials;
+    private List<LandplotType> landplotTypes;
+    private List<Water> waters;
+    private List<Canal> canals;
+    private List<HouseType> houseTypes;
+    private List<CommerceType> commerceTypes;
 
     protected async override void OnInitialized()
     {
         sanitaries = await Service.GetSanitaries();
         heatings = await Service.GetHeatings();
         materials = await Service.GetMaterials();
+        landplotTypes = await Service.GetLandplotTypesAsync();
+        waters = await Service.GetWaterAsync();
+        canals = await Service.GetCanalsAsync();
+        houseTypes = await Service.GetHouseTypesAsync();
+        commerceTypes = await Service.GetCommerceTypesAsync();
+
         StateHasChanged();
+
         nFlatroom.IdSanitary = sanitaries.First().IdSanitary;
         nFlatroom.IdHeating = heatings.First().IdHeating;
         nFlatroom.IdMaterial = materials.First().IdMaterial;
+
+        nLandplot.IdLandplotType = landplotTypes.First().IdLandplotType;
+
+        nHouse.IdWater = waters.First().IdWater;
+        nHouse.IdSanitary = sanitaries.First().IdSanitary;
+        nHouse.IdHeating = heatings.First().IdHeating;
+        nHouse.IdMaterial = materials.First().IdMaterial;
+        nHouse.IdCanal = canals.First().IdCanal;
+        nHouse.IdHouseType = houseTypes.First().IdHouseType;
+
+        nCommerce.IdMaterial = materials.First().IdMaterial;
+        nCommerce.IdCommerceType = commerceTypes.First().IdCommerceType;
     }
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
@@ -127,6 +324,104 @@
             loadedFiles.Add(file);
     }
 
+    private async void SaveCommerce()
+    {
+        // Добавляем новый объект коммерции
+        var addNewCommerceResult = await Service.CreateCommerceAsync(nCommerce);
+
+        nRealty.IdCommerce = addNewCommerceResult.IdCommerce;
+
+        // Добавляем новый объект
+        var addNewRealtyResult = Service.CreateRealtyAsync(nRealty);
+
+        // Добавляем фото
+        foreach (var file in loadedFiles)
+        {
+            var path = "wwwroot\\images\\" + file.Name;
+            var savePath = "images/" + file.Name;
+
+
+            var ms = new MemoryStream();
+            await file.OpenReadStream(5120000).CopyToAsync(ms);
+            using (FileStream newFile = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                ms.WriteTo(newFile);
+            }
+
+            Image nImage = new Image
+                {
+                    IdRealty = addNewRealtyResult.Result.IdRealty,
+                    ImagePath = savePath,
+                };
+            var addNewPhotoResult = Service.CreateRealtyImage(nImage);
+        }
+    }
+
+    private async void SaveHouse()
+    {
+        // Добавляем новый дом
+        var addNewHouseResult = await Service.CreateHouseAsync(nHouse);
+
+        nRealty.IdHouse = addNewHouseResult.IdHouse;
+
+        // Добавляем новый объект
+        var addNewRealtyResult = Service.CreateRealtyAsync(nRealty);
+
+        // Добавляем фото
+        foreach (var file in loadedFiles)
+        {
+            var path = "wwwroot\\images\\" + file.Name;
+            var savePath = "images/" + file.Name;
+
+
+            var ms = new MemoryStream();
+            await file.OpenReadStream(5120000).CopyToAsync(ms);
+            using (FileStream newFile = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                ms.WriteTo(newFile);
+            }
+
+            Image nImage = new Image
+                {
+                    IdRealty = addNewRealtyResult.Result.IdRealty,
+                    ImagePath = savePath,
+                };
+            var addNewPhotoResult = Service.CreateRealtyImage(nImage);
+        }
+    }
+
+    private async void SaveLandplot()
+    {
+        // Добавляем новый земельный участок
+        var addNewLandplotResult = await Service.CreateLandplotAsync(nLandplot);
+
+        nRealty.IdLandplot = addNewLandplotResult.IdLandplot;
+
+        // Добавляем новый объект
+        var addNewRealtyResult = Service.CreateRealtyAsync(nRealty);
+
+        // Добавляем фото
+        foreach (var file in loadedFiles)
+        {
+            var path = "wwwroot\\images\\" + file.Name;
+            var savePath = "images/" + file.Name;
+
+
+            var ms = new MemoryStream();
+            await file.OpenReadStream(5120000).CopyToAsync(ms);
+            using (FileStream newFile = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                ms.WriteTo(newFile);
+            }
+
+            Image nImage = new Image
+                {
+                    IdRealty = addNewRealtyResult.Result.IdRealty,
+                    ImagePath = savePath,
+                };
+            var addNewPhotoResult = Service.CreateRealtyImage(nImage);
+        }
+    }
 
     private async void SaveApartment()
     {

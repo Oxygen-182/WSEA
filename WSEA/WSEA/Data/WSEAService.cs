@@ -12,6 +12,48 @@ namespace WSEA.Data
             _context = context;
         }
 
+        public async Task<Commerce> CreateCommerceAsync(Commerce commerce)
+        {
+            _context.Commerces.Add(commerce);
+            _context.SaveChanges();
+            return await Task.FromResult(commerce);
+        }
+        public async Task<List<CommerceType>> GetCommerceTypesAsync()
+        {
+            return await _context.CommerceTypes.ToListAsync();
+        }
+        public async Task<House> CreateHouseAsync(House house)
+        {
+            _context.Houses.Add(house);
+            _context.SaveChanges();
+            return await Task.FromResult(house);
+        }
+
+        public async Task<List<HouseType>> GetHouseTypesAsync()
+        {
+            return await _context.HouseTypes.ToListAsync();
+        }
+
+        public async Task<List<Canal>> GetCanalsAsync()
+        {
+            return await _context.Canals.ToListAsync();
+        }
+
+        public async Task<List<Water>> GetWaterAsync()
+        {
+            return await _context.Water.ToListAsync();
+        }
+
+        public async Task<Landplot> CreateLandplotAsync(Landplot nLandplot)
+        {
+            _context.Landplots.Add(nLandplot);
+            _context.SaveChanges();
+            return await Task.FromResult(nLandplot);
+        }
+        public async Task<List<LandplotType>> GetLandplotTypesAsync() 
+        {
+            return await _context.LandplotTypes.ToListAsync();
+        }
         public List<Realty> GetFilteredRealtyApartments(FilterModel model)
         {
             IQueryable<Realty> request = _context.Set<Realty>();
