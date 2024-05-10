@@ -12,6 +12,24 @@ namespace WSEA.Data
             _context = context;
         }
 
+
+        public Task<Request> AcceptRealtyAsync(string email, int request_id)
+        {
+            var request = _context.Requests.Find(request_id);
+
+            request.IdRealtor = _context.Realtors.Where(x => x.IdAspNetUsers == email).FirstOrDefault().IdRealtor;
+
+            _context.SaveChanges();
+            return Task.FromResult(request);
+        }
+        public async Task<List<Request>> GetRequestsAsync()
+        {
+            return await _context.Requests
+                .Include(x => x.IdRealtorNavigation)
+                .Include(x => x.IdOperationNavigation)
+                .ToListAsync();
+        }
+
         public async Task<Commerce> CreateCommerceAsync(Commerce commerce)
         {
             _context.Commerces.Add(commerce);

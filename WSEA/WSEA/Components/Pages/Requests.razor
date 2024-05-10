@@ -1,0 +1,77 @@
+﻿@page "/requests"
+
+@using Microsoft.AspNetCore.Identity
+@using WSEA.Data
+@using WSEA.Data.WSEA
+
+@inject NavigationManager navManager;
+
+@inherits OwningComponentBase<WSEAService>
+
+@rendermode InteractiveServer
+
+<AuthorizeView>
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Имя клиента</th>
+                    <th scope="col">Телефон</th>
+                    <th scope="col">Почта</th>
+                    <th scope="col">Описание</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Операция</th>
+                    <th scope="col">Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (requests != null)
+                {
+                    @foreach (var request in requests)
+                    {
+                        <tr>
+                            <td>@request.Name</td>
+                            <td>@request.Phone</td>
+                            <td>@request.Email</td>
+                            <td>@request.Description</td>
+                            <td>@request.Status</td>
+                            <td>@request.IdOperationNavigation.Name</td>
+                            <td>
+                                @if (request.IdRealtorNavigation == null){
+                                        <button type="button" class="btn btn-success" onclick="@(() => AcceptRequest(@context.User.Identity.Name, request.IdRequest))">Принять</button>
+                                }
+                                else
+                                {
+                                        <button type="button" class="btn btn-secondary" disabled>Занято</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+</AuthorizeView>
+
+@code {
+    private List<Request> requests;
+
+    protected override async void OnInitialized()
+    {
+        requests = await Service.GetRequestsAsync();
+
+
+
+        StateHasChanged();
+    }
+
+    private void AcceptRequest(string email, int id)
+    {
+        Service.AcceptRealtyAsync(email, id);
+        navManager.NavigateTo("/requests", forceLoad: true);
+
+    }
+
+}
